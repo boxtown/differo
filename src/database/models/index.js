@@ -1,9 +1,13 @@
+const Post = require('./post');
 const Space = require('./space');
 const User = require('./user');
 
-Space.belongsTo(User, { as: 'author' });
+Post.belongsTo(Space);
+Post.belongsTo(User, { as: 'author' });
+Space.belongsTo(User, { as: 'creator' });
 
 module.exports = {
+  Post,
   Space,
   User,
 };
