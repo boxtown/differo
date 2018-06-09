@@ -1,0 +1,5 @@
+for message in flash
+  .alert(class='alert-' + message.type)
+    button.close(type='button', data-dismiss='alert')
+      i.far.fa-times-circle
+    p= message.message

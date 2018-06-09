@@ -1,0 +1,13 @@
+extends ../layout
+
+block content
+  h1 Sign Up
+  form.mt-4(method='post')
+    input(type='hidden', name='_csrf', value=_csrf)
+    .form-group
+      input.form-control(type='email', name='email', placeholder='Email', required)
+    .form-group
+      input.form-control(type='text', name='username', placeholder='Username', required)
+    .form-group
+      input.form-control(type='password', name='password', placeholder='Password', required)
+    button.btn.btn-primary(type='submit') Sign Up

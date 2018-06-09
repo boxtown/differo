@@ -1,0 +1,35 @@
+nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.mb-4
+  a.navbar-brand(href='#') Differo
+  button.navbar-toggler(
+    type='button',
+    data-toggle='collapse',
+    data-target='#navContent',
+    aria-controls='navContent',
+    aria-expanded='false',
+    aria-label='Toggle navigation',
+  )
+    span.navbar-toggler-icon
+
+  .collapse.navbar-collapse(id='navContent')
+    .d-flex.justify-content-between.flex-fill
+      ul.navbar-nav
+        li.nav-item
+          a.nav-link(href='/') Home
+      ul.navbar-nav
+        li.nav-item.dropdown
+          a.nav-link.dropdown-toggle(
+            href='#'
+            id='userDropdownLink',
+            data-toggle='dropdown',
+            aria-haspopup='true',
+            aria-expanded='false',
+          )
+            i.far.fa-user-circle.fa-lg.mr-2
+          
+          .dropdown-menu.dropdown-menu-right(aria-labelledby='userDropdownLink')
+            if user
+              a.dropdown-item(href='/account') Account
+              a.dropdown-item(href='/log-out') Logout
+            else
+              a.dropdown-item(href='/log-in') Login
+              a.dropdown-item(href='/sign-up') Sign Up

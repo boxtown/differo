@@ -1,0 +1,33 @@
+{
+  "name": "differo",
+  "version": "0.0.1",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "NODE_ENV=test node_modules/.bin/jest --forceExit --coverage"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "jest": "^23.1.0",
+    "sinon": "^5.1.1",
+    "supertest": "^3.1.0"
+  },
+  "dependencies": {
+    "bcrypt": "^2.0.1",
+    "compression": "^1.7.2",
+    "connect-flash": "^0.1.1",
+    "connect-redis": "^3.3.3",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "lusca": "^1.6.0",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "pg": "^7.4.3",
+    "pug": "^2.0.3",
+    "sequelize": "^4.37.10",
+    "winston": "^3.0.0-rc6"
+  }
+}
