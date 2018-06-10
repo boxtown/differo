@@ -1,4 +1,5 @@
 const express = require('express');
+const { body } = require('express-validator/check');
 const compression = require('compression');
 const dotenv = require('dotenv');
 const flash = require('connect-flash');
@@ -23,6 +24,7 @@ if (!sessionSecret) {
 const sessionConfig = require('./config/session');
 const luscaConfig = require('./config/lusca');
 const saveFlashToLocals = require('./middleware/saveFlashToLocals');
+const validate = require('./middleware/validate');
 const passport = require('./passport');
 const routes = require('./routes');
 
@@ -56,7 +58,33 @@ app.get('/log-in', routes.getLogIn);
 app.get('/log-out', routes.getLogOut);
 app.get('/sign-up', routes.getSignUp);
 
-app.post('/log-in', routes.postLogIn);
-app.post('/sign-up', routes.postSignUp);
+app.post(
+  '/log-in',
+  [
+    body('username')
+      .isLength({ max: 255 })
+      .withMessage('Username/password combination is invalid'),
+    validate,
+  ],
+  routes.postLogIn,
+);
+app.post(
+  '/sign-up',
+  [
+    body('email')
+      .isEmail()
+      .withMessage('Email is invalid')
+      .isLength({ max: 255 })
+      .withMessage('Email is invalid'),
+    body('username')
+      .isLength({ max: 255 })
+      .withMessage('Username is invalid'),
+    body('password')
+      .isLength({ min: 1 })
+      .withMessage('Password cannot be empty'),
+    validate,
+  ],
+  routes.postSignUp,
+);
 
 module.exports = app;

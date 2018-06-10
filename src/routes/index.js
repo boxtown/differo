@@ -11,12 +11,13 @@ const getSignUp = (req, res) => res.render('account/signUp', { title: 'Sign Up' 
 
 // Wrapping the call to authenticate allows us to test it properly
 // by stubbing out passport.authenticate
-const postLogIn = (req, res, next) =>
+const postLogIn = (req, res, next) => {
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/log-in',
     failureFlash: true,
   })(req, res, next);
+};
 
 const postSignUp = async (req, res, next) => {
   let user = await User.findByUsernameOrEmail({
