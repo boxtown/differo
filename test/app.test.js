@@ -3,11 +3,20 @@ const sinon = require('sinon');
 
 const app = require('../src/app');
 const passport = require('../src/passport');
-const { User } = require('../src/database/models');
+const { Space, User } = require('../src/database/models');
 
 describe('GET', () => {
+  let sandbox;
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+  });
+  afterEach(() => {
+    sandbox.restore();
+  });
+
   describe('/', () => {
     it('returns a 200 OK', async () => {
+      sandbox.stub(Space, 'findAll').returns(Promise.resolve([]));
       const res = await request(app).get('/');
       expect(res.status).toBe(200);
     });
@@ -21,6 +30,12 @@ describe('GET', () => {
   describe('/sign-up', () => {
     it('returns a 200 OK', async () => {
       const res = await request(app).get('/sign-up');
+      expect(res.status).toBe(200);
+    });
+  });
+  describe('/create-space', () => {
+    it('returns a 200 OK', async () => {
+      const res = await request(app).get('/create-space');
       expect(res.status).toBe(200);
     });
   });
@@ -118,6 +133,13 @@ describe('POST', () => {
         .send({ password: '' });
       expect(res.status).toBe(302);
       expect(res.header.location).toEqual('/sign-up');
+    });
+  });
+  describe('/create-space', () => {
+    it('returns a 302 Redirect to the index', async () => {
+      const res = await request(app).post('/create-space');
+      expect(res.status).toBe(302);
+      expect(res.header.location).toEqual('/');
     });
   });
 });

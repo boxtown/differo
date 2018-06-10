@@ -26,7 +26,9 @@ const luscaConfig = require('./config/lusca');
 const saveFlashToLocals = require('./middleware/saveFlashToLocals');
 const validate = require('./middleware/validate');
 const passport = require('./passport');
-const routes = require('./routes');
+const homeRoutes = require('./routes/home');
+const spaceRoutes = require('./routes/space');
+const userRoutes = require('./routes/user');
 
 const app = express();
 // settings
@@ -53,11 +55,13 @@ app.use((req, res, next) => {
 });
 
 // routes
-app.get('/', routes.getIndex);
-app.get('/log-in', routes.getLogIn);
-app.get('/log-out', routes.getLogOut);
-app.get('/sign-up', routes.getSignUp);
+app.get('/', homeRoutes.getIndex);
+app.get('/create-space', spaceRoutes.getCreateSpace);
+app.get('/log-in', userRoutes.getLogIn);
+app.get('/log-out', userRoutes.getLogOut);
+app.get('/sign-up', userRoutes.getSignUp);
 
+app.post('/create-space', spaceRoutes.postCreateSpace);
 app.post(
   '/log-in',
   [
@@ -66,7 +70,7 @@ app.post(
       .withMessage('Username/password combination is invalid'),
     validate,
   ],
-  routes.postLogIn,
+  userRoutes.postLogIn,
 );
 app.post(
   '/sign-up',
@@ -84,7 +88,7 @@ app.post(
       .withMessage('Password cannot be empty'),
     validate,
   ],
-  routes.postSignUp,
+  userRoutes.postSignUp,
 );
 
 module.exports = app;

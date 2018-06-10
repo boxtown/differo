@@ -1,8 +1,8 @@
 const passport = require('../passport');
 const { User } = require('../database/models');
 
-const getIndex = (req, res) => res.render('home', { title: 'Home' });
 const getLogIn = (req, res) => res.render('account/logIn', { title: 'Log In' });
+
 const getLogOut = (req, res) => {
   req.logOut();
   res.redirect('/');
@@ -42,7 +42,6 @@ const postSignUp = async (req, res, next) => {
 };
 
 module.exports = {
-  getIndex,
   getLogIn,
   getLogOut,
   getSignUp,

@@ -1,4 +1,10 @@
 extends layout
 
 block content
-  h1 Hello, World!
+  .row
+    .col-8
+      ul.list-group
+        for space in spaces
+          li.list-group-item= space.name
+    .col
+      a.btn.btn-primary(href='/create-space') Create Space
