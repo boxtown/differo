@@ -137,9 +137,31 @@ describe('POST', () => {
   });
   describe('/create-space', () => {
     it('returns a 302 Redirect to the index', async () => {
-      const res = await request(app).post('/create-space');
+      sandbox.stub(Space, 'findOne').returns(Promise.resolve());
+      sandbox.stub(Space, 'create').returns(Promise.resolve());
+      const res = await request(app)
+        .post('/create-space')
+        .type('form')
+        .send({ name: 'test' });
       expect(res.status).toBe(302);
       expect(res.header.location).toEqual('/');
+    });
+    it('returns a 302 Redirect back to the create-space page on clashing space name', async () => {
+      sandbox.stub(Space, 'findOne').returns(Promise.resolve('space'));
+      const res = await request(app)
+        .post('/create-space')
+        .type('form')
+        .send({ name: 'test' });
+      expect(res.status).toBe(302);
+      expect(res.header.location).toEqual('/create-space');
+    });
+    it('returns a 302 Redirect back to the create-space page on space name too long', async () => {
+      const res = await request(app)
+        .post('/create-space')
+        .type('form')
+        .send({ name: 'a'.repeat(256) });
+      expect(res.status).toBe(302);
+      expect(res.header.location).toEqual('/create-space');
     });
   });
 });

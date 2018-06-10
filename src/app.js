@@ -23,6 +23,7 @@ if (!sessionSecret) {
 
 const sessionConfig = require('./config/session');
 const luscaConfig = require('./config/lusca');
+const requiresAuth = require('./middleware/requiresAuth');
 const saveFlashToLocals = require('./middleware/saveFlashToLocals');
 const validate = require('./middleware/validate');
 const passport = require('./passport');
@@ -49,19 +50,25 @@ app.use(saveFlashToLocals);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(lusca(luscaConfig));
-app.use((req, res, next) => {
-  res.locals.user = req.user;
-  next();
-});
 
 // routes
 app.get('/', homeRoutes.getIndex);
-app.get('/create-space', spaceRoutes.getCreateSpace);
+app.get('/create-space', requiresAuth, spaceRoutes.getCreateSpace);
 app.get('/log-in', userRoutes.getLogIn);
 app.get('/log-out', userRoutes.getLogOut);
 app.get('/sign-up', userRoutes.getSignUp);
 
-app.post('/create-space', spaceRoutes.postCreateSpace);
+app.post(
+  '/create-space',
+  [
+    requiresAuth,
+    body('name')
+      .isLength({ max: 255 })
+      .withMessage('Name is invalid'),
+    validate,
+  ],
+  spaceRoutes.postCreateSpace,
+);
 app.post(
   '/log-in',
   [

@@ -4,6 +4,7 @@ block content
   h1 Create a new space
   form(method='post')
     input(type='hidden', name='_csrf', value=_csrf)
+    input(type='hidden', name='creatorId', value=user.id)
     .form-group
       input.form-control(type='text', name='name', placeholder='Name', required)
     button.btn.btn-primary(type='submit') Create
