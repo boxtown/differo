@@ -1,6 +1,8 @@
 const request = require('supertest');
 const sinon = require('sinon');
 
+jest.mock('../src/middleware/requiresAuth');
+
 const app = require('../src/app');
 const passport = require('../src/passport');
 const { Space, User } = require('../src/database/models');
