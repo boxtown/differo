@@ -73,7 +73,7 @@ describe('POST', () => {
   describe('/sign-up', () => {
     it('returns a 302 Redirect to the index', async () => {
       sandbox.stub(User, 'findByUsernameOrEmail').returns(Promise.resolve());
-      sandbox.stub(User, 'create').returns(Promise.resolve());
+      sandbox.stub(User, 'create').returns(Promise.resolve({ id: 1 }));
       const res = await request(app)
         .post('/sign-up')
         .type('form')
