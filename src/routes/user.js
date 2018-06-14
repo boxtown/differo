@@ -24,39 +24,31 @@ const postLogIn = (req, res, next) => {
   })(req, res, next);
 };
 
-const postSignUp = async (req, res) => {
+const postSignUp = async (req, res, next) => {
   let user = await User.findByUsernameOrEmail({
     username: req.body.username,
     email: req.body.email,
   });
   if (user) {
     req.flash('error', 'User with email/username already exists');
-    return res.redirect('/sign-up');
+    res.redirect('/sign-up');
+    return;
   }
   user = await User.create({
     username: req.body.username,
     email: req.body.email,
     password: req.body.password,
   });
-  await req.logIn(user);
-  return res.redirect('/');
+  req.logIn(user, (err) => {
+    if (err) {
+      next(err);
+      return;
+    }
+    res.redirect('/');
+  });
 };
 
 const router = express.Router();
-
-// Middleware to promisify the passport-injected logIn method.
-// Borrowed from https://github.com/rkusa/koa-passport/blob/master/lib/framework/koa.js#L46
-router.use((req, res, next) => {
-  const { login } = req;
-  req.login = req.logIn = (user, options) =>
-    new Promise((resolve, reject) => {
-      login.call(req, user, options, (err) => {
-        if (err) reject(err);
-        else resolve();
-      });
-    });
-  next();
-});
 
 router.get('/log-in', getLogIn);
 router.get('/log-out', getLogOut);

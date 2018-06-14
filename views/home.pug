@@ -5,7 +5,10 @@ block content
     .col-8
       ul.list-group
         for space in spaces
-          li.list-group-item= space.name
+          li.list-group-item
+            .d-flex.justify-content-between
+              h5.mb-1= space.name
+              small=space.creator.username
     .col
       if user
         a.btn.btn-primary(href='/create-space') Create Space

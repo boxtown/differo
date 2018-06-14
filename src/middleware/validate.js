@@ -5,7 +5,8 @@ module.exports = (req, res, next) => {
   if (!errors.isEmpty()) {
     const messages = errors.array().map(error => error.msg);
     messages.forEach(message => req.flash('error', message));
-    return res.redirect(req.path);
+    res.redirect(req.path);
+    return;
   }
-  return next();
+  next();
 };

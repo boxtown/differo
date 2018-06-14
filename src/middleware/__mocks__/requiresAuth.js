@@ -1,4 +1,1 @@
-module.exports = (req, res, next) => {
-  res.locals.user = {};
-  next();
-};
+module.exports = (req, res, next) => next();

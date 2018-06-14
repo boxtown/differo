@@ -13,10 +13,11 @@ const postCreateSpace = async (req, res) => {
   const space = await Space.findOne({ where: { name: req.body.name } });
   if (space) {
     req.flash('error', 'Space with name already exists');
-    return res.redirect('/create-space');
+    res.redirect('/create-space');
+    return;
   }
   await Space.create({ name: req.body.name, creatorId: req.body.creatorId });
-  return res.redirect('/');
+  res.redirect('/');
 };
 
 const router = express.Router();

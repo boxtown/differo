@@ -47,6 +47,10 @@ app.use(saveFlashToLocals);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(lusca(luscaConfig));
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
 
 // routes
 app.use(homeRouter);
