@@ -1,5 +1,4 @@
 const express = require('express');
-const { body } = require('express-validator/check');
 const compression = require('compression');
 const dotenv = require('dotenv');
 const flash = require('connect-flash');
@@ -23,13 +22,11 @@ if (!sessionSecret) {
 
 const sessionConfig = require('./config/session');
 const luscaConfig = require('./config/lusca');
-const requiresAuth = require('./middleware/requiresAuth');
 const saveFlashToLocals = require('./middleware/saveFlashToLocals');
-const validate = require('./middleware/validate');
 const passport = require('./passport');
-const homeRoutes = require('./routes/home');
-const spaceRoutes = require('./routes/space');
-const userRoutes = require('./routes/user');
+const homeRouter = require('./routes/home');
+const spaceRouter = require('./routes/space');
+const userRouter = require('./routes/user');
 
 const app = express();
 // settings
@@ -52,50 +49,8 @@ app.use(passport.session());
 app.use(lusca(luscaConfig));
 
 // routes
-app.get('/', homeRoutes.getIndex);
-app.get('/create-space', requiresAuth, spaceRoutes.getCreateSpace);
-app.get('/log-in', userRoutes.getLogIn);
-app.get('/log-out', userRoutes.getLogOut);
-app.get('/sign-up', userRoutes.getSignUp);
-
-app.post(
-  '/create-space',
-  [
-    requiresAuth,
-    body('name')
-      .isLength({ max: 255 })
-      .withMessage('Name is invalid'),
-    validate,
-  ],
-  spaceRoutes.postCreateSpace,
-);
-app.post(
-  '/log-in',
-  [
-    body('username')
-      .isLength({ max: 255 })
-      .withMessage('Username/password combination is invalid'),
-    validate,
-  ],
-  userRoutes.postLogIn,
-);
-app.post(
-  '/sign-up',
-  [
-    body('email')
-      .isEmail()
-      .withMessage('Email is invalid')
-      .isLength({ max: 255 })
-      .withMessage('Email is invalid'),
-    body('username')
-      .isLength({ max: 255 })
-      .withMessage('Username is invalid'),
-    body('password')
-      .isLength({ min: 1 })
-      .withMessage('Password cannot be empty'),
-    validate,
-  ],
-  userRoutes.postSignUp,
-);
+app.use(homeRouter);
+app.use(spaceRouter);
+app.use(userRouter);
 
 module.exports = app;

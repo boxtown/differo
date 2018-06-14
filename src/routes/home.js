@@ -1,3 +1,5 @@
+const express = require('express');
+
 const { Space } = require('../database/models');
 
 const getIndex = async (req, res) => {
@@ -5,6 +7,8 @@ const getIndex = async (req, res) => {
   res.render('home', { title: 'Home', spaces });
 };
 
-module.exports = {
-  getIndex,
-};
+const router = express.Router();
+
+router.get('/', getIndex);
+
+module.exports = router;

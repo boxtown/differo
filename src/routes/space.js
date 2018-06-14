@@ -1,3 +1,8 @@
+const express = require('express');
+const { body } = require('express-validator/check');
+
+const validate = require('../middleware/validate');
+const requiresAuth = require('../middleware/requiresAuth');
 const { Space } = require('../database/models');
 
 const getCreateSpace = (req, res) =>
@@ -13,7 +18,20 @@ const postCreateSpace = async (req, res) => {
   return res.redirect('/');
 };
 
-module.exports = {
-  getCreateSpace,
+const router = express.Router();
+
+router.get('/create-space', requiresAuth, getCreateSpace);
+
+router.post(
+  '/create-space',
+  [
+    requiresAuth,
+    body('name')
+      .isLength({ max: 255 })
+      .withMessage('Name is invalid'),
+    validate,
+  ],
   postCreateSpace,
-};
+);
+
+module.exports = router;

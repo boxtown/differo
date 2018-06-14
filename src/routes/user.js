@@ -1,3 +1,7 @@
+const express = require('express');
+const { body } = require('express-validator/check');
+
+const validate = require('../middleware/validate');
 const passport = require('../passport');
 const { User } = require('../database/models');
 
@@ -41,11 +45,39 @@ const postSignUp = async (req, res, next) => {
   });
 };
 
-module.exports = {
-  getLogIn,
-  getLogOut,
-  getSignUp,
+const router = express.Router();
 
+router.get('/log-in', getLogIn);
+router.get('/log-out', getLogOut);
+router.get('/sign-up', getSignUp);
+
+router.post(
+  '/log-in',
+  [
+    body('username')
+      .isLength({ max: 255 })
+      .withMessage('Username/password combination is invalid'),
+    validate,
+  ],
   postLogIn,
+);
+router.post(
+  '/sign-up',
+  [
+    body('email')
+      .isEmail()
+      .withMessage('Email is invalid')
+      .isLength({ max: 255 })
+      .withMessage('Email is invalid'),
+    body('username')
+      .isLength({ max: 255 })
+      .withMessage('Username is invalid'),
+    body('password')
+      .isLength({ min: 1 })
+      .withMessage('Password cannot be empty'),
+    validate,
+  ],
   postSignUp,
-};
+);
+
+module.exports = router;
