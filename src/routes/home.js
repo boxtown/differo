@@ -1,5 +1,6 @@
 const express = require('express');
 
+const async = require('../middleware/async');
 const { Space } = require('../database/models');
 
 const getIndex = async (req, res) => {
@@ -9,6 +10,6 @@ const getIndex = async (req, res) => {
 
 const router = express.Router();
 
-router.get('/', getIndex);
+router.get('/', async(getIndex));
 
 module.exports = router;

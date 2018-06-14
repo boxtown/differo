@@ -1,6 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator/check');
 
+const async = require('../middleware/async');
 const validate = require('../middleware/validate');
 const passport = require('../passport');
 const { User } = require('../database/models');
@@ -39,12 +40,6 @@ const postSignUp = async (req, res) => {
   });
   await req.logIn(user);
   return res.redirect('/');
-  // return req.logIn(user, (err) => {
-  //   if (err) {
-  //     next(err);
-  //   }
-  //   res.redirect('/');
-  // });
 };
 
 const router = express.Router();
@@ -93,7 +88,7 @@ router.post(
       .withMessage('Password cannot be empty'),
     validate,
   ],
-  postSignUp,
+  async(postSignUp),
 );
 
 module.exports = router;

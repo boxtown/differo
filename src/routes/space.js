@@ -1,6 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator/check');
 
+const async = require('../middleware/async');
 const validate = require('../middleware/validate');
 const requiresAuth = require('../middleware/requiresAuth');
 const { Space } = require('../database/models');
@@ -31,7 +32,7 @@ router.post(
       .withMessage('Name is invalid'),
     validate,
   ],
-  postCreateSpace,
+  async(postCreateSpace),
 );
 
 module.exports = router;
