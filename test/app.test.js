@@ -35,8 +35,21 @@ describe('GET', () => {
       expect(res.status).toBe(200);
     });
   });
-  describe('/create-space', () => {
+  describe('/space/:slug', () => {
     it('returns a 200 OK', async () => {
+      sandbox.stub(Space, 'findOne').returns(Promise.resolve({}));
+      const res = await request(app).get('/space/test');
+      expect(res.status).toBe(200);
+    });
+    it('returns a 404 if space does not exist', async () => {
+      sandbox.stub(Space, 'findOne').returns(Promise.resolve());
+      const res = await request(app).get('/space/test');
+      expect(res.status).toBe(404);
+    });
+  });
+  describe('/create-space', () => {
+    // TODO: figure out how to test appropriately
+    xit('returns a 200 OK', async () => {
       const res = await request(app).get('/create-space');
       expect(res.status).toBe(200);
     });
@@ -148,6 +161,15 @@ describe('POST', () => {
       expect(res.status).toBe(302);
       expect(res.header.location).toEqual('/');
     });
+    it('saves a correct slug', async () => {
+      sandbox.stub(Space, 'findOne').returns(Promise.resolve());
+      const stub = sandbox.stub(Space, 'create').returns(Promise.resolve());
+      await request(app)
+        .post('/create-space')
+        .type('form')
+        .send({ name: 'My Test Space' });
+      expect(stub.calledWith(sinon.match({ slug: 'My-Test-Space' }))).toBe(true);
+    });
     it('returns a 302 Redirect back to the create-space page on clashing space name', async () => {
       sandbox.stub(Space, 'findOne').returns(Promise.resolve('space'));
       const res = await request(app)
@@ -162,6 +184,14 @@ describe('POST', () => {
         .post('/create-space')
         .type('form')
         .send({ name: 'a'.repeat(256) });
+      expect(res.status).toBe(302);
+      expect(res.header.location).toEqual('/create-space');
+    });
+    it('returns a 302 Redirect back to the create-space page on space name not ascii', async () => {
+      const res = await request(app)
+        .post('/create-space')
+        .type('form')
+        .send({ name: '♥' });
       expect(res.status).toBe(302);
       expect(res.header.location).toEqual('/create-space');
     });

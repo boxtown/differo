@@ -3,9 +3,9 @@ extends layout
 block content
   .row
     .col-8
-      ul.list-group
+      .list-group
         for space in spaces
-          li.list-group-item
+          a(href=`/space/${space.slug}`).list-group-item
             .d-flex.justify-content-between
               h5.mb-1= space.name
               small=`created ${moment(space.createdAt).fromNow()}`
