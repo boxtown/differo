@@ -1,10 +1,10 @@
 const express = require('express');
 
 const async = require('../middleware/async');
-const { User, Space } = require('../database/models');
+const { Space } = require('../database/models');
 
 const getIndex = async (req, res) => {
-  const spaces = await Space.findAll({ include: [{ model: User, as: 'creator' }] });
+  const spaces = await Space.findAll();
   res.render('home', { title: 'Home', spaces });
 };
 

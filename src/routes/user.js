@@ -12,6 +12,7 @@ const getLogOut = (req, res) => {
   req.logOut();
   res.redirect('/');
 };
+
 const getSignUp = (req, res) => res.render('account/signUp', { title: 'Sign Up' });
 
 // Wrapping the call to authenticate allows us to test it properly
@@ -25,20 +26,13 @@ const postLogIn = (req, res, next) => {
 };
 
 const postSignUp = async (req, res, next) => {
-  let user = await User.findByUsernameOrEmail({
-    username: req.body.username,
-    email: req.body.email,
-  });
+  let user = await User.findByUsernameOrEmail(req.body);
   if (user) {
     req.flash('error', 'User with email/username already exists');
     res.redirect('/sign-up');
     return;
   }
-  user = await User.create({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-  });
+  user = await User.create(req.body);
   req.logIn(user, (err) => {
     if (err) {
       next(err);

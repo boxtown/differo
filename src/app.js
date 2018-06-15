@@ -29,6 +29,8 @@ const spaceRouter = require('./routes/space');
 const userRouter = require('./routes/user');
 
 const app = express();
+app.locals.moment = require('moment');
+
 // settings
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'pug');

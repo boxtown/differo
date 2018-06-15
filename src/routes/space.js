@@ -16,7 +16,7 @@ const postCreateSpace = async (req, res) => {
     res.redirect('/create-space');
     return;
   }
-  await Space.create({ name: req.body.name, creatorId: req.body.creatorId });
+  await Space.create(req.body);
   res.redirect('/');
 };
 
