@@ -2,7 +2,7 @@ extends ../layout
 
 block content
   h1 Create a new space
-  form(method='post', action='/space')
+  form.mt-4(method='post', action='/space')
     input(type='hidden', name='_csrf', value=_csrf)
     input(type='hidden', name='creatorId', value=user.id)
     .form-group

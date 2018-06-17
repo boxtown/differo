@@ -10,7 +10,7 @@ const getPostNew = async (req, res) => {
     res.status(404).send('Not Found');
     return;
   }
-  res.render('post/createPost', { title: 'Create a new post' });
+  res.render('post/createPost', { title: 'Create a new post', space });
 };
 
 const router = express.Router();

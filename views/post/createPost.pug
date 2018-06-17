@@ -2,3 +2,10 @@ extends ../layout
 
 block content
   h1 Create a new post
+  h5 submitting to #{space.name}
+  form.mt-4(method='post', action=`/space/${space.slug}/post`)
+    input(type='hidden', name='_csrf', value=_csrf)
+    input(type='hidden', name='creatorId', value=user.id)
+    .form-group
+      input.form-control(type='text', name='title', placeholder='Title', required)
+    button.btn.btn-primary(type='submit') Create
