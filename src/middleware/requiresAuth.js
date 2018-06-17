@@ -3,5 +3,6 @@ module.exports = (req, res, next) => {
     next();
     return;
   }
+  req.session.redirectTo = req.path;
   res.redirect('/log-in');
 };

@@ -19,7 +19,7 @@ const getSignUp = (req, res) => res.render('account/signUp', { title: 'Sign Up' 
 // by stubbing out passport.authenticate
 const postLogIn = (req, res, next) => {
   passport.authenticate('local', {
-    successRedirect: '/',
+    successRedirect: req.session.redirectTo || '/',
     failureRedirect: '/log-in',
     failureFlash: true,
   })(req, res, next);
