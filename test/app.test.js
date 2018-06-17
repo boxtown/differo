@@ -48,8 +48,7 @@ describe('GET', () => {
     });
   });
   describe('/create-space', () => {
-    // TODO: figure out how to test appropriately
-    xit('returns a 200 OK', async () => {
+    it('returns a 200 OK', async () => {
       const res = await request(app).get('/create-space');
       expect(res.status).toBe(200);
     });
