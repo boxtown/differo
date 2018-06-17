@@ -5,10 +5,13 @@ const slug = require('slug');
 const async = require('../middleware/async');
 const validate = require('../middleware/validate');
 const requiresAuth = require('../middleware/requiresAuth');
-const { Space } = require('../database/models');
+const { Post, Space } = require('../database/models');
 
 const getSpace = async (req, res) => {
-  const space = await Space.findOne({ where: { slug: req.params.slug } });
+  const space = await Space.findOne({
+    where: { slug: req.params.slug },
+    include: [Post],
+  });
   if (!space) {
     res.status(404).send('Not Found');
     return;
@@ -31,7 +34,7 @@ const postSpace = async (req, res) => {
     res.redirect('/space/new');
     return;
   }
-  await Space.create({ ...req.body, slug: spaceSlug });
+  await Space.create({ ...req.body, slug: spaceSlug, creatorId: req.user.id });
   res.redirect('/');
 };
 

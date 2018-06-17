@@ -1,4 +1,7 @@
+const mockUser = { id: 1, username: 'Mock User' };
+
 module.exports = (req, res, next) => {
-  res.locals.user = { id: 1, username: 'Fake User' };
+  req.user = mockUser;
+  res.locals.user = mockUser;
   next();
 };

@@ -4,5 +4,9 @@ block content
   .row
     .col-8
       h1= space.name
+      ul.list-group
+        for post in space.posts
+          li.list-group-item
+            h5= post.title
     .col
       a.btn.btn-primary(href=`/space/${space.slug}/post/new`) Create Post

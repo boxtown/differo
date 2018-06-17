@@ -4,7 +4,6 @@ block content
   h1 Create a new space
   form.mt-4(method='post', action='/space')
     input(type='hidden', name='_csrf', value=_csrf)
-    input(type='hidden', name='creatorId', value=user.id)
     .form-group
       input.form-control(type='text', name='name', placeholder='Name', required)
     .form-group

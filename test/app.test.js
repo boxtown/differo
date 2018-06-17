@@ -5,7 +5,7 @@ jest.mock('../src/middleware/requiresAuth');
 
 const app = require('../src/app');
 const passport = require('../src/passport');
-const { Space, User } = require('../src/database/models');
+const { Post, Space, User } = require('../src/database/models');
 
 describe('GET', () => {
   let sandbox;
@@ -216,6 +216,29 @@ describe('POST', () => {
         .send({ name: '♥' });
       expect(res.status).toBe(302);
       expect(res.header.location).toEqual('/space/new');
+    });
+
+    describe('/:slug', () => {
+      describe('/post', () => {
+        it('returns a 302 Redirect to the the space page', async () => {
+          sandbox.stub(Space, 'findOne').returns(Promise.resolve({ slug: 'test' }));
+          sandbox.stub(Post, 'create').returns(Promise.resolve());
+          const res = await request(app)
+            .post('/space/test/post')
+            .type('form')
+            .send({ title: 'test' });
+          expect(res.status).toBe(302);
+          expect(res.header.location).toEqual('/space/test');
+        });
+        it('returns a 400 Bad Request if the space cannot be found', async () => {
+          sandbox.stub(Space, 'findOne').returns(Promise.resolve());
+          const res = await request(app)
+            .post('/space/test/post')
+            .type('form')
+            .send({ title: 'test' });
+          expect(res.status).toBe(400);
+        });
+      });
     });
   });
 });
