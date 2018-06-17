@@ -16,15 +16,14 @@ const getSpace = async (req, res) => {
   res.render('space/index', { title: space.name, space });
 };
 
-const getCreateSpace = (req, res) =>
-  res.render('space/createSpace', { title: 'Create a new space' });
+const getSpaceNew = (req, res) => res.render('space/createSpace', { title: 'Create a new space' });
 
-const postCreateSpace = async (req, res) => {
+const postSpace = async (req, res) => {
   const spaceSlug = slug(req.body.name);
   const space = await Space.findOne({ where: { slug: spaceSlug } });
   if (space) {
     req.flash('error', 'Space with name already exists');
-    res.redirect('/create-space');
+    res.redirect('/space/new');
     return;
   }
   await Space.create({ ...req.body, slug: spaceSlug });
@@ -33,20 +32,20 @@ const postCreateSpace = async (req, res) => {
 
 const router = express.Router();
 
-router.get('/space/:slug', getSpace);
-router.get('/create-space', requiresAuth, getCreateSpace);
+router.get('/new', requiresAuth, getSpaceNew);
+router.get('/:slug', getSpace);
 
 router.post(
-  '/create-space',
+  '/',
   [
     requiresAuth,
     body('name')
       .isLength({ max: 255 })
       .isAscii()
       .withMessage('Name is invalid'),
-    validate,
+    validate({ redirectPath: '/space/new' }),
   ],
-  async(postCreateSpace),
+  async(postSpace),
 );
 
 module.exports = router;

@@ -54,7 +54,7 @@ router.post(
     body('username')
       .isLength({ max: 255 })
       .withMessage('Username/password combination is invalid'),
-    validate,
+    validate(),
   ],
   postLogIn,
 );
@@ -72,7 +72,7 @@ router.post(
     body('password')
       .isLength({ min: 1 })
       .withMessage('Password cannot be empty'),
-    validate,
+    validate(),
   ],
   async(postSignUp),
 );

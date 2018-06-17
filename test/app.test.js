@@ -35,22 +35,24 @@ describe('GET', () => {
       expect(res.status).toBe(200);
     });
   });
-  describe('/space/:slug', () => {
-    it('returns a 200 OK', async () => {
-      sandbox.stub(Space, 'findOne').returns(Promise.resolve({}));
-      const res = await request(app).get('/space/test');
-      expect(res.status).toBe(200);
+  describe('/space', () => {
+    describe('/new', () => {
+      it('returns a 200 OK', async () => {
+        const res = await request(app).get('/space/new');
+        expect(res.status).toBe(200);
+      });
     });
-    it('returns a 404 if space does not exist', async () => {
-      sandbox.stub(Space, 'findOne').returns(Promise.resolve());
-      const res = await request(app).get('/space/test');
-      expect(res.status).toBe(404);
-    });
-  });
-  describe('/create-space', () => {
-    it('returns a 200 OK', async () => {
-      const res = await request(app).get('/create-space');
-      expect(res.status).toBe(200);
+    describe('/:slug', () => {
+      it('returns a 200 OK', async () => {
+        sandbox.stub(Space, 'findOne').returns(Promise.resolve({}));
+        const res = await request(app).get('/space/test');
+        expect(res.status).toBe(200);
+      });
+      it('returns a 404 if space does not exist', async () => {
+        sandbox.stub(Space, 'findOne').returns(Promise.resolve());
+        const res = await request(app).get('/space/test');
+        expect(res.status).toBe(404);
+      });
     });
   });
 });
@@ -149,12 +151,12 @@ describe('POST', () => {
       expect(res.header.location).toEqual('/sign-up');
     });
   });
-  describe('/create-space', () => {
+  describe('/space', () => {
     it('returns a 302 Redirect to the index', async () => {
       sandbox.stub(Space, 'findOne').returns(Promise.resolve());
       sandbox.stub(Space, 'create').returns(Promise.resolve());
       const res = await request(app)
-        .post('/create-space')
+        .post('/space')
         .type('form')
         .send({ name: 'test' });
       expect(res.status).toBe(302);
@@ -164,35 +166,35 @@ describe('POST', () => {
       sandbox.stub(Space, 'findOne').returns(Promise.resolve());
       const stub = sandbox.stub(Space, 'create').returns(Promise.resolve());
       await request(app)
-        .post('/create-space')
+        .post('/space')
         .type('form')
         .send({ name: 'My Test Space' });
       expect(stub.calledWith(sinon.match({ slug: 'My-Test-Space' }))).toBe(true);
     });
-    it('returns a 302 Redirect back to the create-space page on clashing space name', async () => {
+    it('returns a 302 Redirect back to the /space/new page on clashing space name', async () => {
       sandbox.stub(Space, 'findOne').returns(Promise.resolve('space'));
       const res = await request(app)
-        .post('/create-space')
+        .post('/space')
         .type('form')
         .send({ name: 'test' });
       expect(res.status).toBe(302);
-      expect(res.header.location).toEqual('/create-space');
+      expect(res.header.location).toEqual('/space/new');
     });
-    it('returns a 302 Redirect back to the create-space page on space name too long', async () => {
+    it('returns a 302 Redirect back to the /space/new page on space name too long', async () => {
       const res = await request(app)
-        .post('/create-space')
+        .post('/space')
         .type('form')
         .send({ name: 'a'.repeat(256) });
       expect(res.status).toBe(302);
-      expect(res.header.location).toEqual('/create-space');
+      expect(res.header.location).toEqual('/space/new');
     });
-    it('returns a 302 Redirect back to the create-space page on space name not ascii', async () => {
+    it('returns a 302 Redirect back to the /space/new page on space name not ascii', async () => {
       const res = await request(app)
-        .post('/create-space')
+        .post('/space')
         .type('form')
         .send({ name: '♥' });
       expect(res.status).toBe(302);
-      expect(res.header.location).toEqual('/create-space');
+      expect(res.header.location).toEqual('/space/new');
     });
   });
 });

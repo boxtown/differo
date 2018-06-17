@@ -56,7 +56,7 @@ app.use((req, res, next) => {
 
 // routes
 app.use(homeRouter);
-app.use(spaceRouter);
 app.use(userRouter);
+app.use('/space', spaceRouter);
 
 module.exports = app;
