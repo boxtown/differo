@@ -25,8 +25,9 @@ const luscaConfig = require('./config/lusca');
 const saveFlashToLocals = require('./middleware/saveFlashToLocals');
 const passport = require('./passport');
 const homeRouter = require('./routes/home');
-const spaceRouter = require('./routes/space');
 const userRouter = require('./routes/user');
+const spaceRouter = require('./routes/space');
+const postRouter = require('./routes/post');
 
 const app = express();
 app.locals.moment = require('moment');
@@ -57,6 +58,7 @@ app.use((req, res, next) => {
 // routes
 app.use(homeRouter);
 app.use(userRouter);
-app.use('/space', spaceRouter);
+app.use(spaceRouter);
+app.use(postRouter);
 
 module.exports = app;

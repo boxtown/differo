@@ -1,4 +1,8 @@
 extends ../layout
 
 block content
-  h1= space.name
+  .row
+    .col-8
+      h1= space.name
+    .col
+      a.btn.btn-primary(href=`/space/${space.slug}/post/new`) Create Post

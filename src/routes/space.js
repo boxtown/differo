@@ -20,6 +20,11 @@ const getSpaceNew = (req, res) => res.render('space/createSpace', { title: 'Crea
 
 const postSpace = async (req, res) => {
   const spaceSlug = slug(req.body.name);
+  if (spaceSlug.toLowerCase() === 'new') {
+    req.flash('error', 'Space name is reserved');
+    res.redirect('/space/new');
+    return;
+  }
   const space = await Space.findOne({ where: { slug: spaceSlug } });
   if (space) {
     req.flash('error', 'Space with name already exists');
@@ -32,11 +37,11 @@ const postSpace = async (req, res) => {
 
 const router = express.Router();
 
-router.get('/new', requiresAuth, getSpaceNew);
-router.get('/:slug', getSpace);
+router.get('/space/new', requiresAuth, getSpaceNew);
+router.get('/space/:slug', async(getSpace));
 
 router.post(
-  '/',
+  '/space',
   [
     requiresAuth,
     body('name')

@@ -53,6 +53,19 @@ describe('GET', () => {
         const res = await request(app).get('/space/test');
         expect(res.status).toBe(404);
       });
+
+      describe('/post/new', () => {
+        it('returns a 200 OK', async () => {
+          sandbox.stub(Space, 'findOne').returns(Promise.resolve({}));
+          const res = await request(app).get('/space/test/post/new');
+          expect(res.status).toBe(200);
+        });
+        it('returns a 404 if space does not exist', async () => {
+          sandbox.stub(Space, 'findOne').returns(Promise.resolve());
+          const res = await request(app).get('/space/test/post/new');
+          expect(res.status).toBe(404);
+        });
+      });
     });
   });
 });
@@ -177,6 +190,14 @@ describe('POST', () => {
         .post('/space')
         .type('form')
         .send({ name: 'test' });
+      expect(res.status).toBe(302);
+      expect(res.header.location).toEqual('/space/new');
+    });
+    it('returns a 302 Redirect back to the /space/new page on reserved space name', async () => {
+      const res = await request(app)
+        .post('/space')
+        .type('form')
+        .send({ name: 'New' });
       expect(res.status).toBe(302);
       expect(res.header.location).toEqual('/space/new');
     });
